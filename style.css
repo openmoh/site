@@ -35,3 +35,80 @@ footer {
 small {
   font-size: 0.8rem;
 }
+
+/* Download buttons */
+.download-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-download {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 25px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.2s, transform 0.2s;
+  min-width: 100px;
+}
+.btn-download:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  color: white;
+  text-decoration: none;
+}
+.btn-download .os-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.btn-download .os-name {
+  font-weight: 500;
+  margin-top: 5px;
+}
+.btn-download .os-version {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+.btn-download .download-arrow {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+@media (max-width: 576px) {
+  .download-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .btn-download {
+    width: 80%;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+  .btn-download .os-icon {
+    font-size: 1.5rem;
+  }
+  .btn-download .os-name {
+    margin-top: 0;
+  }
+  .btn-download .os-version {
+    margin-top: 0;
+  }
+  .btn-download .download-arrow {
+    position: static;
+    font-size: 1rem;
+    opacity: 0.5;
+    margin-left: auto;
+    align-self: center;
+  }
+}

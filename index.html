@@ -24,6 +24,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <link href="style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="icon" type="image/png" href="./favicon.png">
 </head>
 
@@ -79,13 +80,32 @@
                 style="white-space: nowrap;"><strong>Medal of Honor: Allied Assault</strong></span> and its
               expansions <span style="white-space: nowrap;">(Spearhead and
                 Breakthrough).</span></div>
-            <a href="https://github.com/openmoh/openmohaa/releases"><img src="images/download.svg" class="w-75 pt-4"
-                alt="Download"></a>
-            <br>
-            <div class="w-75 mx-auto">
+            <div class="mt-4 text-white opacity-75">Download for:</div>
+            <div id="download-buttons" class="download-buttons mt-2">
+              <a id="btn-windows" href="https://github.com/openmoh/openmohaa/releases" class="btn-download btn-windows">
+                <i class="fa-brands fa-windows os-icon"></i>
+                <span class="os-name">Windows</span>
+                <span class="os-version"></span>
+                <i class="fa-solid fa-download download-arrow"></i>
+              </a>
+              <a id="btn-linux" href="https://github.com/openmoh/openmohaa/releases" class="btn-download btn-linux">
+                <i class="fa-brands fa-linux os-icon"></i>
+                <span class="os-name">Linux</span>
+                <span class="os-version"></span>
+                <i class="fa-solid fa-download download-arrow"></i>
+              </a>
+              <a id="btn-macos" href="https://github.com/openmoh/openmohaa/releases" class="btn-download btn-macos">
+                <i class="fa-brands fa-apple os-icon"></i>
+                <span class="os-name">macOS</span>
+                <span class="os-version"></span>
+                <i class="fa-solid fa-download download-arrow"></i>
+              </a>
+            </div>
+            <div class="mt-3">
+              <a href="https://github.com/openmoh/openmohaa/releases" class="text-white opacity-75"><i class="fa-brands fa-github"></i> All releases & other platforms →</a>
+            </div>
+            <div class="w-75 mx-auto mt-3">
               <small class="opacity-50"><i>Original game files are not provided and are required to play.</i></small>
-              <br>
-              <img class="w-25 mt-4 opacity-75" src="images/os.png" alt="Available for Windows, macOS, and Linux">
             </div>
           </div>
         </div>
@@ -115,6 +135,84 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
     crossorigin="anonymous"></script>
+
+  <script>
+    (function() {
+      const CACHE_KEY = 'openmohaa_latest_release';
+      const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
+      function getCachedRelease() {
+        try {
+          const cached = localStorage.getItem(CACHE_KEY);
+          if (cached) {
+            const data = JSON.parse(cached);
+            if (Date.now() - data.timestamp < CACHE_TTL) {
+              return data.release;
+            }
+          }
+        } catch (e) {}
+        return null;
+      }
+
+      function cacheRelease(release) {
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            timestamp: Date.now(),
+            release: release
+          }));
+        } catch (e) {}
+      }
+
+      function findAsset(assets, pattern) {
+        return assets.find(a => pattern.test(a.name));
+      }
+
+      function updateButtons(release) {
+        const version = release.tag_name;
+        const assets = release.assets;
+
+        const windowsAsset = findAsset(assets, /-windows-x64\.msi$/);
+        const linuxAsset = findAsset(assets, /-linux-amd64\.zip$/);
+        const macosAsset = findAsset(assets, /-macos-multiarch.*\.zip$/);
+
+        if (windowsAsset) {
+          const btn = document.getElementById('btn-windows');
+          btn.href = windowsAsset.browser_download_url;
+          btn.querySelector('.os-version').textContent = version;
+        }
+        if (linuxAsset) {
+          const btn = document.getElementById('btn-linux');
+          btn.href = linuxAsset.browser_download_url;
+          btn.querySelector('.os-version').textContent = version;
+        }
+        if (macosAsset) {
+          const btn = document.getElementById('btn-macos');
+          btn.href = macosAsset.browser_download_url;
+          btn.querySelector('.os-version').textContent = version;
+        }
+      }
+
+      function fetchLatestRelease() {
+        const cached = getCachedRelease();
+        if (cached) {
+          updateButtons(cached);
+          return;
+        }
+
+        fetch('https://api.github.com/repos/openmoh/openmohaa/releases/latest')
+          .then(response => response.json())
+          .then(release => {
+            if (release && release.assets) {
+              cacheRelease(release);
+              updateButtons(release);
+            }
+          })
+          .catch(() => {});
+      }
+
+      fetchLatestRelease();
+    })();
+  </script>
 
 </body>
 
