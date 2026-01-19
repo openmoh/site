@@ -80,18 +80,21 @@
                 <i class="fa-brands fa-windows os-icon"></i>
                 <span class="os-name">Windows</span>
                 <span class="os-version"></span>
+                <span class="os-arch"></span>
                 <i class="fa-solid fa-download download-arrow"></i>
               </a>
               <a id="btn-linux" href="https://github.com/openmoh/openmohaa/releases" class="btn-download btn-linux">
                 <i class="fa-brands fa-linux os-icon"></i>
                 <span class="os-name">Linux</span>
                 <span class="os-version"></span>
+                <span class="os-arch"></span>
                 <i class="fa-solid fa-download download-arrow"></i>
               </a>
               <a id="btn-macos" href="https://github.com/openmoh/openmohaa/releases" class="btn-download btn-macos">
                 <i class="fa-brands fa-apple os-icon"></i>
                 <span class="os-name">macOS</span>
                 <span class="os-version"></span>
+                <span class="os-arch"></span>
                 <i class="fa-solid fa-download download-arrow"></i>
               </a>
             </div>
@@ -99,7 +102,7 @@
               <a href="https://github.com/openmoh/openmohaa/releases" class="text-white opacity-75"><i
                   class="fa-brands fa-github"></i> All releases & other platforms →</a>
             </div>
-            <div class="w-75 mx-auto mt-3">
+            <div class="w-100 mx-auto mt-3">
               <small class="opacity-50"><i>Original game files are not provided and are required to play.</i></small>
             </div>
           </div>
@@ -147,16 +150,19 @@
           const btn = document.getElementById('btn-windows');
           btn.href = windowsAsset.browser_download_url;
           btn.querySelector('.os-version').textContent = version;
+          btn.querySelector('.os-arch').textContent = "x64";
         }
         if (linuxAsset) {
           const btn = document.getElementById('btn-linux');
           btn.href = linuxAsset.browser_download_url;
           btn.querySelector('.os-version').textContent = version;
+          btn.querySelector('.os-arch').textContent = "amd64";
         }
         if (macosAsset) {
           const btn = document.getElementById('btn-macos');
           btn.href = macosAsset.browser_download_url;
           btn.querySelector('.os-version').textContent = version;
+          btn.querySelector('.os-arch').textContent = "Universal";
         }
       }
 
